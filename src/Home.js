@@ -1,42 +1,25 @@
 import { useState } from 'react';
 
 const Home = () => {
-	// let name  = "mario";
-	// When using useState, you need to attach it to an array variable.
-	// Name = the current variable of the state, setName = the function that will be used to set the new Name when the function is called.
-	const [name, setName] = useState('Mario');
-	const [age, setAge] = useState(25);
-	const handleClick = () => {
-		setName('Luigi');
-		setAge(30);
-	};
+	const [blogs, setBlogs] = useState([
+		{ title: 'My new Website!', body: 'lorem ipsum...', author: 'Mario', id: 1 },
+		{ title: 'Welcome Party!', body: 'lorem ipsum...', author: 'Yoshi', id: 2 },
+		{ title: 'Web Dev Top Tips!', body: 'lorem ipsum...', author: 'Mario', id: 3 },
+	]);
 
-	// *** Anonymous Function ***
-	// const handleClickAgain = (name) => {
-	// 	console.log('Hello' + name);
-	// };
-
+	//  Key{} is how React keeps track of all the list properties. IDs must be unique
+	// This Map function is similar to a for loop in Java
 	return (
 		<div className='home'>
-			<h2>HomePage</h2>
-
-			<p>
-				{name} is {age} years old
-			</p>
-			<button onClick={handleClick}>Click me!</button>
-
-			{/* <button
-				onClick={() => {
-					handleClickAgain('mario');
-				}}>
-				Click me Again!
-			</button> */}
+			{' '}
+			{blogs.map((blog) => (
+				<div className='blog-preview' key={blog.id}>
+					<h2>{blog.title}</h2>
+					<p>Written by {blog.author}</p>
+				</div>
+			))}
 		</div>
 	);
 };
-
-// Note: We don't want to invoke the function handleClick.
-// If we do handleClick(), the function would run at runtime as opposed to running when the button is clicked.
-// anonymous button redirects to another function. This is used when you have variables that you want to pass in
 
 export default Home;
