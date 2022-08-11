@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import BlogList from './BlogList';
 
 const Home = () => {
 	const [blogs, setBlogs] = useState([
@@ -7,17 +8,15 @@ const Home = () => {
 		{ title: 'Web Dev Top Tips!', body: 'lorem ipsum...', author: 'Mario', id: 3 },
 	]);
 
-	//  Key{} is how React keeps track of all the list properties. IDs must be unique
-	// This Map function is similar to a for loop in Java
+	//  Props are used here for two reasons
+	// 1. It allows for the BlogList component to be more re-useable
+	// 2. It allows for us to still use the data above in the home component
+	// Props are used to pass data from a parent component to a child component.
+	// Create a tag on the Component, and then access it wihtin the component's file.
+	// Props here, are both 'blogs' and 'title'
 	return (
 		<div className='home'>
-			{' '}
-			{blogs.map((blog) => (
-				<div className='blog-preview' key={blog.id}>
-					<h2>{blog.title}</h2>
-					<p>Written by {blog.author}</p>
-				</div>
-			))}
+			<BlogList blogs={blogs} title='All Blogs!' />
 		</div>
 	);
 };
