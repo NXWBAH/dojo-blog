@@ -3,6 +3,7 @@ import BlogList from './BlogList';
 
 const Home = () => {
 	const [blogs, setBlogs] = useState(null);
+	const [isPending, setIsPending] = useState(true);
 
 	// This function passes the entire blogs array into the new Blogs, but looks for the blog associated with the id passed into it.
 	// That blog is then removed from the array --  and the new array, without that blog, is set as the updated blogs to be displayed.
@@ -20,15 +21,23 @@ const Home = () => {
 	// It is important to note that we can only setBlogs here because we are passing in an empty dependancy. Meaning this useEffect only gets ran during
 	// the initial launch.
 
+	// When the Data is finished Loading, the Loading message that is getting displayed will be turned off and the data will be displayed in it's place.
+	// setTimeout implements a timer that tells the function to wait for x amount of seconds before running the method within it.
+	// The second parameter details how long to wait until the function is ran - 1000 miliseconds == 1 second.
+	// Realistically, we don't need this because the Loading message will be displayed until the server call is completed.
+
 	useEffect(() => {
-		fetch('http://localhost:8000/blogs')
-			.then((res) => {
-				return res.json();
-			})
-			.then((data) => {
-				console.log(data);
-				setBlogs(data);
-			});
+		setTimeout(() => {
+			fetch('http://localhost:8000/blogs')
+				.then((res) => {
+					return res.json();
+				})
+				.then((data) => {
+					console.log(data);
+					setBlogs(data);
+					setIsPending(false);
+				});
+		}, 1000);
 	}, []);
 
 	//  Props are used here for two reasons
@@ -42,7 +51,14 @@ const Home = () => {
 	// Logical AND -- && -- It evaluates the left first. If the left is false, it doesn't even bother with the right side.
 	// This is needed because when the program is initially ran, the blogs variable is set to Null and Null throws an error
 	// Due to blogs being cycled through a map in the BlogList.js
-	return <div className='home'>{blogs && <BlogList blogs={blogs} title='All Blogs!' />}</div>;
+
+	// isPending undergoes the same conditional Logical AND - && - method. A Loading message will be displayed while the data is fetched.
+	return (
+		<div className='home'>
+			{isPending && <div>Loading...</div>}
+			{blogs && <BlogList blogs={blogs} title='All Blogs!' />}
+		</div>
+	);
 };
 
 export default Home;
