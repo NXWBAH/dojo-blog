@@ -4,6 +4,7 @@ import BlogList from './BlogList';
 const Home = () => {
 	const [blogs, setBlogs] = useState(null);
 	const [isPending, setIsPending] = useState(true);
+	const [error, setError] = useState(null);
 
 	// This function passes the entire blogs array into the new Blogs, but looks for the blog associated with the id passed into it.
 	// That blog is then removed from the array --  and the new array, without that blog, is set as the updated blogs to be displayed.
@@ -30,11 +31,19 @@ const Home = () => {
 		setTimeout(() => {
 			fetch('http://localhost:8000/blogs')
 				.then((res) => {
+					if (!res.ok) {
+						throw Error('Could not fetch the data for that resource.');
+					}
 					return res.json();
 				})
 				.then((data) => {
 					console.log(data);
 					setBlogs(data);
+					setIsPending(false);
+					setError(null);
+				})
+				.catch((err) => {
+					setError(err.message);
 					setIsPending(false);
 				});
 		}, 1000);
@@ -55,6 +64,7 @@ const Home = () => {
 	// isPending undergoes the same conditional Logical AND - && - method. A Loading message will be displayed while the data is fetched.
 	return (
 		<div className='home'>
+			{error && <div>{error}</div>}
 			{isPending && <div>Loading...</div>}
 			{blogs && <BlogList blogs={blogs} title='All Blogs!' />}
 		</div>
