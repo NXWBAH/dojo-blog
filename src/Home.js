@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BlogList from './BlogList';
 
 const Home = () => {
@@ -15,6 +15,18 @@ const Home = () => {
 		setBlogs(newBlogs);
 	};
 
+	const [name, setName] = useState('Mario');
+
+	// Used for Authentication Services - Gets ran every render of the data
+	// DO NOT CHANGE THE STATE FROM WITHIN useEffect. It will result in a never ending loop.
+	// Passing in an empty array as a dependancy allows for useEffect to only be ran during the initial launch of the application.
+	// If there is a dependancy listed, it will watch that dependancy and will only run when that dependancy is altered.
+
+	useEffect(() => {
+		console.log('Use effect ran.');
+		console.log(name);
+	}, [name]);
+
 	//  Props are used here for two reasons
 	// 1. It allows for the BlogList component to be more re-useable
 	// 2. It allows for us to still use the data above in the home component
@@ -27,6 +39,8 @@ const Home = () => {
 		<div className='home'>
 			<BlogList blogs={blogs} title='All Blogs!' handleDelete={handleDelete} />
 			<BlogList blogs={blogs.filter((blog) => blog.author === 'Mario')} title="Mario's Blogs!" />
+			<button onClick={() => setName('Luigi')}>Change Name</button>
+			<p>{name}</p>
 		</div>
 	);
 };
