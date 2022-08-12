@@ -2,30 +2,34 @@ import { useState, useEffect } from 'react';
 import BlogList from './BlogList';
 
 const Home = () => {
-	const [blogs, setBlogs] = useState([
-		{ title: 'My new Website!', body: 'lorem ipsum...', author: 'Mario', id: 1 },
-		{ title: 'Welcome Party!', body: 'lorem ipsum...', author: 'Yoshi', id: 2 },
-		{ title: 'Web Dev Top Tips!', body: 'lorem ipsum...', author: 'Mario', id: 3 },
-	]);
+	const [blogs, setBlogs] = useState(null);
 
 	// This function passes the entire blogs array into the new Blogs, but looks for the blog associated with the id passed into it.
 	// That blog is then removed from the array --  and the new array, without that blog, is set as the updated blogs to be displayed.
-	const handleDelete = (id) => {
-		const newBlogs = blogs.filter((blog) => blog.id !== id);
-		setBlogs(newBlogs);
-	};
 
-	const [name, setName] = useState('Mario');
-
-	// Used for Authentication Services - Gets ran every render of the data
+	// useEffect is used for Authentication Services - Gets ran every render of the data
 	// DO NOT CHANGE THE STATE FROM WITHIN useEffect. It will result in a never ending loop.
 	// Passing in an empty array as a dependancy allows for useEffect to only be ran during the initial launch of the application.
 	// If there is a dependancy listed, it will watch that dependancy and will only run when that dependancy is altered.
 
+	// fetch grabs the resource that is being watched. It is a GET method, and is a promise so we need a .then method at the end of it.
+	// Can not make it async.
+	// When you return a result (res), it is a promise and asyncronous -- requires a .then method.
+	// Data is the Json data in  db.json.
+
+	// It is important to note that we can only setBlogs here because we are passing in an empty dependancy. Meaning this useEffect only gets ran during
+	// the initial launch.
+
 	useEffect(() => {
-		console.log('Use effect ran.');
-		console.log(name);
-	}, [name]);
+		fetch('http://localhost:8000/blogs')
+			.then((res) => {
+				return res.json();
+			})
+			.then((data) => {
+				console.log(data);
+				setBlogs(data);
+			});
+	}, []);
 
 	//  Props are used here for two reasons
 	// 1. It allows for the BlogList component to be more re-useable
@@ -35,14 +39,10 @@ const Home = () => {
 	// 		Props here, are both 'blogs' and 'title'
 	// .Filter allows you to cycle through the array and filter what you want to be returned.
 	// blogs.filter((blog) => blog.author === 'mario') allows you only return Blogs associated with mario
-	return (
-		<div className='home'>
-			<BlogList blogs={blogs} title='All Blogs!' handleDelete={handleDelete} />
-			<BlogList blogs={blogs.filter((blog) => blog.author === 'Mario')} title="Mario's Blogs!" />
-			<button onClick={() => setName('Luigi')}>Change Name</button>
-			<p>{name}</p>
-		</div>
-	);
+	// Logical AND -- && -- It evaluates the left first. If the left is false, it doesn't even bother with the right side.
+	// This is needed because when the program is initially ran, the blogs variable is set to Null and Null throws an error
+	// Due to blogs being cycled through a map in the BlogList.js
+	return <div className='home'>{blogs && <BlogList blogs={blogs} title='All Blogs!' />}</div>;
 };
 
 export default Home;
