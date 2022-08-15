@@ -13,16 +13,22 @@
       "id": 2
     },
     {
-      "title": "Mario's New Blog",
-      "body": "THIS IS A NEW BLOG BY MARIO",
+      "title": "This is a new blog",
+      "body": "Hello everyone! This is Mario testing the software",
       "author": "Mario",
       "id": 3
     },
     {
-      "title": "Mario's New Blog",
-      "body": "THIS IS A NEW BLOG BY MARIO",
-      "author": "Mario",
+      "title": "Test",
+      "body": "Test Text",
+      "author": "Yoshi",
       "id": 4
+    },
+    {
+      "title": "This is Test",
+      "body": "Test Text",
+      "author": "Mario",
+      "id": 5
     }
   ]
 }
