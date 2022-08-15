@@ -21,6 +21,8 @@ import { useEffect, useState } from 'react';
 // The second parameter details how long to wait until the function is ran - 1000 miliseconds == 1 second.
 // Realistically, we don't need this because the Loading message will be displayed until the server call is completed.
 
+// to run a JSON server file from within react - npx json-server --watch [FILE_LOCATION]  --port [DESIRED PORT]
+
 const useFetch = (url) => {
 	const [data, setData] = useState(null);
 	const [isPending, setIsPending] = useState(true);
